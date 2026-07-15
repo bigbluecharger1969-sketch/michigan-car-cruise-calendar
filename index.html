@@ -3,86 +3,578 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <!-- ===========================================
+         Michigan Car Cruise Calendar
+         Version 2.0
+         Author: Scott Stap & ChatGPT
+    ============================================ -->
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Michigan Car Cruise Calendar</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
+    <title>Michigan Car Cruise Calendar</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="description"
+          content="Michigan's Community Calendar for Car Shows, Cruise Nights, Cars & Coffee, Swap Meets and Automotive Events.">
 
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="keywords"
+          content="Michigan Car Shows, Cruise Nights, Cars and Coffee, Automotive Events, Classic Cars, Muscle Cars">
 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <meta name="author"
+          content="Michigan Car Cruise Calendar">
+
+    <meta property="og:title"
+          content="Michigan Car Cruise Calendar">
+
+    <meta property="og:description"
+          content="Find Michigan Car Shows, Cruise Nights and Cars & Coffee">
+
+    <meta property="og:type"
+          content="website">
+
+    <meta property="og:image"
+          content="images/bigbluecharger-header.jpg">
+
+    <meta property="og:url"
+          content="https://YOURUSERNAME.github.io/michigan-car-cruise-calendar/">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Stylesheets -->
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <link rel="stylesheet"
+          href="css/navigation.css">
+
+    <link rel="stylesheet"
+          href="css/cards.css">
+
+    <link rel="stylesheet"
+          href="css/table.css">
+
+    <link rel="stylesheet"
+          href="css/mobile.css">
 
 </head>
 
 <body>
 
-<header>
+<!-- =====================================================
+     HERO
+====================================================== -->
 
-<div class="overlay">
+<header class="hero">
 
-<h1>🚗 Michigan Car Cruise Calendar</h1>
+    <div class="hero-overlay">
+
+        <div class="hero-content">
+
+            <div class="logo-area">
+
+                <h1>
+
+                    MICHIGAN
+
+                    <span>
+
+                        Car Cruise Calendar
+
+                    </span>
+
+                </h1>
+
+            </div>
+
+            <p class="hero-tagline">
+
+                Michigan's Community Calendar for
+
+                <strong>
+
+                    Car Shows • Cruise Nights • Cars & Coffee
+
+                </strong>
+
+            </p>
+
+            <div class="hero-buttons">
+
+                <a class="btn btn-primary"
+
+                   href="#events">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    Find Events
+
+                </a>
+
+                <a class="btn btn-facebook"
+
+                   href="https://www.facebook.com/groups/michigancarcruise"
+
+                   target="_blank">
+
+                    <i class="fa-brands fa-facebook"></i>
+
+                    Join Facebook Community
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+<!-- =====================================================
+     NAVIGATION
+====================================================== -->
+
+<nav class="main-nav">
+
+    <div class="nav-container">
+
+        <div class="nav-logo">
+
+            <i class="fa-solid fa-car-side"></i>
+
+            MCCC
+
+        </div>
+
+        <ul>
+
+            <li>
+
+                <a href="index.html"
+                   class="active">
+
+                    Home
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#today">
+
+                    Today's Shows
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#weekend">
+
+                    This Weekend
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#events">
+
+                    Events
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="map.html">
+
+                    Map
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#about">
+
+                    About
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+</nav>
+
+<!-- =====================================================
+     MAIN CONTENT
+====================================================== -->
+
+<main>
+
+<!-- =====================================================
+     FIND EVENTS
+====================================================== -->
+
+<section id="today"
+         class="finder">
+
+    <div class="container">
+
+        <h2>
+
+            Find Michigan Events
+
+        </h2>
+
+        <p>
+
+            Select a date to see every known Michigan
+            car show, cruise night, Cars & Coffee,
+            and automotive event.
+
+        </p>
+
+        <div class="finder-controls">
+
+            <input type="date"
+                   id="selectedDate">
+
+            <button id="todayButton"
+                    class="btn btn-primary">
+
+                Today
+
+            </button>
+
+            <button id="weekendButton"
+                    class="btn btn-secondary">
+
+                This Weekend
+
+            </button>
+
+            <button id="allEventsButton"
+                    class="btn btn-secondary">
+
+                View All Events
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     STATISTICS SECTION
+====================================================== -->
+
+<section class="statistics">
+
+    <div class="container">
+
+        <div class="stat-card">
+
+            <h3 id="eventCount">
+
+                0
+
+            </h3>
+
+            <p>
+
+                Total Events
+
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3 id="showCount">
+
+                0
+
+            </h3>
+
+            <p>
+
+                Car Shows
+
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3 id="cruiseCount">
+
+                0
+
+            </h3>
+
+            <p>
+
+                Cruise Nights
+
+            </p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h3 id="coffeeCount">
+
+                0
+
+            </h3>
+
+            <p>
+
+                Cars & Coffee
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+  <!-- =====================================================
+     FEATURED EVENT
+====================================================== -->
+
+<section class="featured-event">
+
+    <div class="container">
+
+        <div class="featured-card">
+
+            <div class="featured-text">
+
+                <span class="featured-label">
+
+                    ⭐ FEATURED EVENT
+
+                </span>
+
+                <h2 id="featuredTitle">
+
+                    Michigan Car Cruise Calendar
+
+                </h2>
+
+                <p id="featuredDescription">
+
+                    Featured events will automatically appear
+                    here as they are flagged in the Google Sheet.
+
+                </p>
+
+                <button
+                    id="featuredButton"
+                    class="btn btn-primary">
+
+                    View Event
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     SEARCH
+====================================================== -->
+
+<section class="search-section">
+
+    <div class="container">
+
+        <h2>
+
+            Search Events
+
+        </h2>
+
+        <input
+
+            type="text"
+
+            id="searchBox"
+
+            placeholder="Search by city, event, venue or organizer..."
+
+        >
+
+    </div>
+
+</section>
+
+<!-- =====================================================
+     FILTER BUTTONS
+====================================================== -->
+
+<section class="filters">
+
+<div class="container">
+
+<button class="filterButton active"
+
+        data-filter="all">
+
+All Events
+
+</button>
+
+<button class="filterButton"
+
+        data-filter="Car Show">
+
+Car Shows
+
+</button>
+
+<button class="filterButton"
+
+        data-filter="Cruise Night">
+
+Cruise Nights
+
+</button>
+
+<button class="filterButton"
+
+        data-filter="Cars & Coffee">
+
+Cars & Coffee
+
+</button>
+
+<button class="filterButton"
+
+        data-filter="Swap Meet">
+
+Swap Meets
+
+</button>
+
+<button class="filterButton"
+
+        data-filter="Charity">
+
+Charity
+
+</button>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     EVENTS
+====================================================== -->
+
+<section
+
+id="events"
+
+class="events-section">
+
+<div class="container">
 
 <h2>
-Michigan's Community Calendar for
-Car Shows • Cruise Nights • Cars & Coffee
+
+Upcoming Events
+
 </h2>
 
 <p>
 
-Search hundreds of Michigan automotive events
-powered by our Facebook community.
+Showing live events from the Michigan Car Cruise Calendar database.
 
 </p>
 
-<a class="facebookButton"
-href="https://www.facebook.com/groups/michigancarcruise"
-target="_blank">
+<div class="table-wrapper">
 
-Join our Facebook Community
+<table
 
-</a>
-
-</div>
-
-</header>
-
-<nav>
-
-<a href="#">Home</a>
-
-<a href="#">Today's Shows</a>
-
-<a href="#">This Weekend</a>
-
-<a href="#">Cruise Nights</a>
-
-<a href="#">Car Shows</a>
-
-<a href="#">Cars & Coffee</a>
-
-<a href="#">Map</a>
-
-</nav>
-
-<section class="content">
-
-<h2>Upcoming Events</h2>
-
-<table id="eventsTable">
+id="eventsTable">
 
 <thead>
 
 <tr>
 
-<th>Event</th>
-<th>Date</th>
-<th>City</th>
+<th>
+
+Date
+
+</th>
+
+<th>
+
+Event
+
+</th>
+
+<th>
+
+City
+
+</th>
+
+<th>
+
+Type
+
+</th>
+
+<th>
+
+Time
+
+</th>
+
+<th>
+
+Details
+
+</th>
 
 </tr>
 
@@ -90,19 +582,110 @@ Join our Facebook Community
 
 <tbody>
 
+<tr>
+
+<td colspan="6">
+
+Loading Events...
+
+</td>
+
+</tr>
+
 </tbody>
 
 </table>
 
+</div>
+
+</div>
+
 </section>
+
+<!-- =====================================================
+     FACEBOOK
+====================================================== -->
+
+<section class="facebook-section">
+
+<div class="container">
+
+<h2>
+
+Join the Community
+
+</h2>
+
+<p>
+
+Thousands of Michigan enthusiasts share upcoming events,
+pictures, cruise nights and automotive news.
+
+</p>
+
+<a
+
+class="btn btn-facebook"
+
+target="_blank"
+
+href="https://www.facebook.com/groups/michigancarcruise">
+
+Visit Facebook Group
+
+</a>
+
+</div>
+
+</section>
+
+<!-- =====================================================
+     FOOTER
+====================================================== -->
 
 <footer>
 
-Michigan Car Cruise Calendar © 2026
+<div class="container">
+
+<p>
+
+Michigan Car Cruise Calendar
+
+</p>
+
+<p>
+
+Powered by the Michigan Car Cruise Calendar Community
+
+</p>
+
+<p>
+
+Website Version 2.0
+
+</p>
+
+</div>
 
 </footer>
 
-<script src="script.js"></script>
+</main>
+
+<!-- =====================================================
+     JAVASCRIPT
+====================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<script src="js/sheets.js"></script>
+
+<script src="js/filters.js"></script>
+
+<script src="js/ui.js"></script>
+
+<script src="js/app.js"></script>
 
 </body>
+
 </html>
+
