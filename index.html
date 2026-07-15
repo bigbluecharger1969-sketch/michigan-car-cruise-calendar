@@ -1,19 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
-    <title>Michigan Car Cruise Calendar</title>
+<meta charset="UTF-8">
 
-    <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Michigan Car Cruise Calendar</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
 </head>
 
 <body>
 
+<header>
+
+<div class="overlay">
+
 <h1>🚗 Michigan Car Cruise Calendar</h1>
 
-<p>Reading events from Google Sheets...</p>
+<h2>
+Michigan's Community Calendar for
+Car Shows • Cruise Nights • Cars & Coffee
+</h2>
+
+<p>
+
+Search hundreds of Michigan automotive events
+powered by our Facebook community.
+
+</p>
+
+<a class="facebookButton"
+href="https://www.facebook.com/groups/michigancarcruise"
+target="_blank">
+
+Join our Facebook Community
+
+</a>
+
+</div>
+
+</header>
+
+<nav>
+
+<a href="#">Home</a>
+
+<a href="#">Today's Shows</a>
+
+<a href="#">This Weekend</a>
+
+<a href="#">Cruise Nights</a>
+
+<a href="#">Car Shows</a>
+
+<a href="#">Cars & Coffee</a>
+
+<a href="#">Map</a>
+
+</nav>
+
+<section class="content">
+
+<h2>Upcoming Events</h2>
 
 <table id="eventsTable">
 
@@ -35,9 +94,15 @@
 
 </table>
 
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</section>
+
+<footer>
+
+Michigan Car Cruise Calendar © 2026
+
+</footer>
+
 <script src="script.js"></script>
 
 </body>
-
 </html>
