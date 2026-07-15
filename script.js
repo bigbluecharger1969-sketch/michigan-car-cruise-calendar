@@ -1,36 +1,28 @@
 const csvURL =
 "https://docs.google.com/spreadsheets/d/e/2PACX-1vQQIifWAOAY5pFv7TnTfg7ZJxuEFIWtUXb-kExeaSW5LoZK9CpIBXBerrrTuauLt5P_zJBdbr-R9Sba/pub?output=csv";
 
-fetch(csvURL)
+Papa.parse(csvURL, {
+    download: true,
+    header: true,
+    complete: function(results) {
 
-.then(response => response.text())
+        const tbody = document.querySelector("#eventsTable tbody");
 
-.then(data => {
+        results.data.forEach(event => {
 
-const rows = data.split("\n");
+            if (!event["Event Name"]) return;
 
-const table = document.querySelector("#eventsTable tbody");
+            const row = document.createElement("tr");
 
-for(let i=1;i<rows.length;i++){
+            row.innerHTML = `
+                <td>${event["Event Name"]}</td>
+                <td>${event["Date"]}</td>
+                <td>${event["City"]}</td>
+            `;
 
-const cols = rows[i].split(",");
+            tbody.appendChild(row);
 
-if(cols.length<8) continue;
+        });
 
-const tr=document.createElement("tr");
-
-tr.innerHTML=`
-
-<td>${cols[2]}</td>
-
-<td>${cols[13]}</td>
-
-<td>${cols[7]}</td>
-
-`;
-
-table.appendChild(tr);
-
-}
-
+    }
 });
