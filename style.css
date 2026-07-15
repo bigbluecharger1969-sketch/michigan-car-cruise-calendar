@@ -1,0 +1,43 @@
+body{
+
+    font-family:Arial;
+
+    background:#efefef;
+
+    margin:40px;
+
+}
+
+h1{
+
+    color:#c00000;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    background:white;
+
+}
+
+th{
+
+    background:#c00000;
+
+    color:white;
+
+    padding:10px;
+
+}
+
+td{
+
+    padding:8px;
+
+    border:1px solid #ddd;
+
+}
