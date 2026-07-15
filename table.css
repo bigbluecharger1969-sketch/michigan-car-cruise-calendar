@@ -1,0 +1,406 @@
+/* ==========================================================
+   Michigan Car Cruise Calendar
+   table.css
+   ========================================================== */
+
+/* ==========================================================
+   EVENTS SECTION
+========================================================== */
+
+.events-section {
+
+    padding: 70px 0;
+
+}
+
+.events-section h2 {
+
+    font-family: "Oswald", sans-serif;
+
+    font-size: 2.5rem;
+
+    margin-bottom: 10px;
+
+    color: #ffffff;
+
+}
+
+.events-section p {
+
+    color: #bdbdbd;
+
+    margin-bottom: 30px;
+
+    font-size: 1rem;
+
+}
+
+/* ==========================================================
+   TABLE WRAPPER
+========================================================== */
+
+.table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 15px;
+
+    box-shadow: 0 20px 40px rgba(0,0,0,.35);
+
+}
+
+/* ==========================================================
+   TABLE
+========================================================== */
+
+#eventsTable {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: #1a1a1a;
+
+    color: white;
+
+    min-width: 950px;
+
+}
+
+/* ==========================================================
+   HEADER
+========================================================== */
+
+#eventsTable thead {
+
+    background: linear-gradient(
+        to right,
+        #9d0000,
+        #c1121f
+    );
+
+}
+
+#eventsTable thead th {
+
+    padding: 18px;
+
+    text-align: left;
+
+    font-family: "Oswald", sans-serif;
+
+    font-size: 1rem;
+
+    letter-spacing: .5px;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+
+}
+
+/* ==========================================================
+   BODY
+========================================================== */
+
+#eventsTable tbody tr {
+
+    transition: .20s;
+
+}
+
+#eventsTable tbody tr:nth-child(even){
+
+    background:#222;
+
+}
+
+#eventsTable tbody tr:nth-child(odd){
+
+    background:#1a1a1a;
+
+}
+
+#eventsTable tbody tr:hover{
+
+    background:#2f3d4f;
+
+}
+
+#eventsTable td{
+
+    padding:16px;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+    vertical-align:middle;
+
+    font-size:.95rem;
+
+}
+
+/* ==========================================================
+   EVENT NAME
+========================================================== */
+
+.event-name{
+
+    font-weight:700;
+
+    color:white;
+
+    font-size:1rem;
+
+}
+
+.event-name:hover{
+
+    color:#4db8ff;
+
+}
+
+/* ==========================================================
+   CITY
+========================================================== */
+
+.event-city{
+
+    color:#cccccc;
+
+}
+
+/* ==========================================================
+   DATE
+========================================================== */
+
+.event-date{
+
+    font-weight:bold;
+
+    color:#4db8ff;
+
+    white-space:nowrap;
+
+}
+
+/* ==========================================================
+   TIME
+========================================================== */
+
+.event-time{
+
+    color:#dddddd;
+
+    white-space:nowrap;
+
+}
+
+/* ==========================================================
+   TYPE BADGES
+========================================================== */
+
+.badge{
+
+    display:inline-block;
+
+    padding:6px 12px;
+
+    border-radius:30px;
+
+    font-size:.80rem;
+
+    font-weight:bold;
+
+    text-transform:uppercase;
+
+}
+
+/* Car Show */
+
+.badge-show{
+
+    background:#1565c0;
+
+    color:white;
+
+}
+
+/* Cruise Night */
+
+.badge-cruise{
+
+    background:#00897b;
+
+    color:white;
+
+}
+
+/* Cars & Coffee */
+
+.badge-coffee{
+
+    background:#795548;
+
+    color:white;
+
+}
+
+/* Swap Meet */
+
+.badge-swap{
+
+    background:#8e24aa;
+
+    color:white;
+
+}
+
+/* Charity */
+
+.badge-charity{
+
+    background:#d84315;
+
+    color:white;
+
+}
+
+/* ==========================================================
+   DETAILS BUTTON
+========================================================== */
+
+.details-button{
+
+    background:#0b74d1;
+
+    color:white;
+
+    border:none;
+
+    padding:8px 18px;
+
+    border-radius:25px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:.9rem;
+
+}
+
+.details-button:hover{
+
+    background:#2196f3;
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================================================
+   EMPTY TABLE MESSAGE
+========================================================== */
+
+.no-events{
+
+    text-align:center;
+
+    color:#cccccc;
+
+    padding:50px;
+
+    font-style:italic;
+
+}
+
+/* ==========================================================
+   SORTABLE HEADERS (Future)
+========================================================== */
+
+.sortable{
+
+    cursor:pointer;
+
+    user-select:none;
+
+}
+
+.sortable:hover{
+
+    color:#ffd54f;
+
+}
+
+/* ==========================================================
+   LOADING ROW
+========================================================== */
+
+.loading-row{
+
+    text-align:center;
+
+    color:#cccccc;
+
+    padding:40px;
+
+}
+
+/* ==========================================================
+   TABLE SCROLLBAR
+========================================================== */
+
+.table-wrapper::-webkit-scrollbar{
+
+    height:10px;
+
+}
+
+.table-wrapper::-webkit-scrollbar-track{
+
+    background:#222;
+
+}
+
+.table-wrapper::-webkit-scrollbar-thumb{
+
+    background:#555;
+
+    border-radius:20px;
+
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover{
+
+    background:#888;
+
+}
+
+/* ==========================================================
+   RESPONSIVE TABLE
+========================================================== */
+
+@media(max-width:900px){
+
+    #eventsTable{
+
+        min-width:700px;
+
+    }
+
+    #eventsTable th{
+
+        font-size:.9rem;
+
+    }
+
+    #eventsTable td{
+
+        font-size:.9rem;
+
+        padding:12px;
+
+    }
+
+}
