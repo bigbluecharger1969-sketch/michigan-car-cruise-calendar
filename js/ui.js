@@ -411,6 +411,423 @@ ${event.description || "No description available."}
 </div>
 
 `;
+/***********************************************************************
+ *
+ * ui.js
+ *
+ * PART 2
+ *
+ * Event Rendering
+ *
+ **********************************************************************/
 
+
+//============================================================
+// BUILD FEATURE BADGES
+//============================================================
+
+function buildBadges(event)
+{
+
+    let html = "";
+
+    if(event.featuredEvent)
+        html += `<span class="modal-badge">⭐ Featured Event</span>`;
+
+    if(event.familyFriendly)
+        html += `<span class="modal-badge">👨‍👩‍👧 Family Friendly</span>`;
+
+    if(event.food)
+        html += `<span class="modal-badge">🍔 Food</span>`;
+
+    if(event.dj)
+        html += `<span class="modal-badge">🎵 DJ</span>`;
+
+    if(event.liveMusic)
+        html += `<span class="modal-badge">🎸 Live Music</span>`;
+
+    if(event.awards)
+        html += `<span class="modal-badge">🏆 Awards</span>`;
+
+    if(event.doorPrizes)
+        html += `<span class="modal-badge">🎁 Door Prizes</span>`;
+
+    if(event.fifty50)
+        html += `<span class="modal-badge">💵 50 / 50</span>`;
+
+    if(event.burnoutsAllowed)
+        html += `<span class="modal-badge">🔥 Burnouts Allowed</span>`;
+
+    if(html === "")
+        return "";
+
+    return `
+
+<div class="modal-badges">
+
+${html}
+
+</div>
+
+`;
+
+}
+
+
+
+//============================================================
+// BUILD INFORMATION GRID
+//============================================================
+
+function buildInformationGrid(event)
+{
+
+    return `
+
+<div class="feature-grid">
+
+<div class="feature">
+
+<i class="fa-solid fa-calendar"></i>
+
+<strong>Date</strong>
+
+<br>
+
+${formatDate(event.date)}
+
+</div>
+
+
+<div class="feature">
+
+<i class="fa-regular fa-clock"></i>
+
+<strong>Time</strong>
+
+<br>
+
+${event.startTime || "TBA"}
+
+${event.endTime ? "<br>" + event.endTime : ""}
+
+</div>
+
+
+<div class="feature">
+
+<i class="fa-solid fa-dollar-sign"></i>
+
+<strong>Entry</strong>
+
+<br>
+
+${formatMoney(event.entryFee)}
+
+</div>
+
+
+<div class="feature">
+
+<i class="fa-solid fa-eye"></i>
+
+<strong>Spectators</strong>
+
+<br>
+
+${formatMoney(event.spectatorFee)}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+
+
+//============================================================
+// BUILD LOCATION
+//============================================================
+
+function buildLocation(event)
+{
+
+    return `
+
+<h3>
+
+<i class="fa-solid fa-location-dot"></i>
+
+Location
+
+</h3>
+
+<p>
+
+<strong>${event.venue || ""}</strong>
+
+</p>
+
+<p>
+
+${event.street || ""}
+
+</p>
+
+<p>
+
+${event.city || ""},
+
+${event.state || ""}
+
+${event.zip || ""}
+
+</p>
+
+`;
+
+}
+
+
+
+//============================================================
+// BUILD DESCRIPTION
+//============================================================
+
+function buildDescription(event)
+{
+
+    return `
+
+<h3>
+
+<i class="fa-solid fa-circle-info"></i>
+
+Description
+
+</h3>
+
+<p>
+
+${event.description || "No description available."}
+
+</p>
+
+`;
+
+}
+
+
+
+//============================================================
+// BUILD ORGANIZER
+//============================================================
+
+function buildOrganizer(event)
+{
+
+    if(!event.organizer && !event.contact)
+        return "";
+
+    return `
+
+<h3>
+
+<i class="fa-solid fa-user-group"></i>
+
+Organizer
+
+</h3>
+
+<p>
+
+${event.organizer || ""}
+
+</p>
+
+<p>
+
+${event.contact || ""}
+
+</p>
+
+`;
+
+}
+
+
+
+//============================================================
+// BUILD WEATHER
+//============================================================
+
+function buildWeather(event)
+{
+
+    if(!event.weatherPolicy)
+        return "";
+
+    return `
+
+<h3>
+
+<i class="fa-solid fa-cloud-sun"></i>
+
+Weather Policy
+
+</h3>
+
+<p>
+
+${event.weatherPolicy}
+
+</p>
+
+`;
+
+}
+
+
+
+//============================================================
+// BUILD LINKS
+//============================================================
+
+function buildLinks(event)
+{
+
+    let html = "";
+
+    if(event.website)
+    {
+
+        html += `
+
+<p>
+
+<i class="fa-solid fa-globe"></i>
+
+<a href="${event.website}"
+
+target="_blank">
+
+Website
+
+</a>
+
+</p>
+
+`;
+
+    }
+
+    if(event.facebook)
+    {
+
+        html += `
+
+<p>
+
+<i class="fa-brands fa-facebook"></i>
+
+<a href="${event.facebook}"
+
+target="_blank">
+
+Facebook
+
+</a>
+
+</p>
+
+`;
+
+    }
+
+    if(html === "")
+        return "";
+
+    return `
+
+<h3>
+
+Links
+
+</h3>
+
+${html}
+
+`;
+
+}
+
+
+
+//============================================================
+// RENDER EVENT
+//============================================================
+
+function renderEvent(event)
+{
+
+    const body = document.getElementById("modalBody");
+
+    body.innerHTML = `
+
+${event.flyerLink ?
+
+`
+
+<div style="margin-bottom:25px;">
+
+<img
+
+src="${event.flyerLink}"
+
+alt="${event.name}"
+
+style="width:100%;border-radius:12px;">
+
+</div>
+
+`
+
+: ""}
+
+${buildBadges(event)}
+
+${buildInformationGrid(event)}
+
+<hr>
+
+${buildLocation(event)}
+
+<hr>
+
+${buildDescription(event)}
+
+${buildOrganizer(event)}
+
+${buildWeather(event)}
+
+${buildLinks(event)}
+
+`;
+
+
+
+    //---------------------------------------------------------
+    // Enable / Disable Buttons
+    //---------------------------------------------------------
+
+    document.getElementById("facebookButton").disabled =
+        !event.facebook;
+
+    document.getElementById("websiteButton").disabled =
+        !event.website;
+
+}
 }
 
