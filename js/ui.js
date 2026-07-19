@@ -831,3 +831,361 @@ ${buildLinks(event)}
 }
 }
 
+/***********************************************************************
+ *
+ * ui.js
+ *
+ * PART 3
+ *
+ * Modal Polish & Accessibility
+ *
+ **********************************************************************/
+
+//============================================================
+// MODAL STATE
+//============================================================
+
+let lastFocusedElement = null;
+
+let focusableElements = [];
+
+
+
+//============================================================
+// OPEN MODAL
+//============================================================
+
+function showEvent(event)
+{
+
+    currentEvent = event;
+
+    lastFocusedElement = document.activeElement;
+
+    document.getElementById("modalTitle").textContent =
+        event.name;
+
+    renderEvent(event);
+
+    const modal = document.getElementById("eventModal");
+
+    modal.classList.remove("hidden");
+
+    document.body.classList.add("modal-open");
+
+    updateFooterButtons(event);
+
+    initializeFocusTrap();
+
+    const closeButton =
+        document.getElementById("closeModal");
+
+    if(closeButton)
+    {
+        closeButton.focus();
+    }
+
+}
+
+
+
+//============================================================
+// CLOSE MODAL
+//============================================================
+
+function closeEventModal()
+{
+
+    const modal = document.getElementById("eventModal");
+
+    modal.classList.add("hidden");
+
+    document.body.classList.remove("modal-open");
+
+    if(lastFocusedElement)
+    {
+        lastFocusedElement.focus();
+    }
+
+}
+
+
+
+//============================================================
+// ENABLE / DISABLE BUTTONS
+//============================================================
+
+function updateFooterButtons(event)
+{
+
+    document.getElementById("facebookButton").disabled =
+        !event.facebook;
+
+    document.getElementById("websiteButton").disabled =
+        !event.website;
+
+    document.getElementById("directionsButton").disabled =
+        !(event.street && event.city);
+
+}
+
+
+
+//============================================================
+// FOCUS TRAP
+//============================================================
+
+function initializeFocusTrap()
+{
+
+    const modal =
+        document.getElementById("eventModal");
+
+    focusableElements =
+        modal.querySelectorAll(
+
+            "button, a[href], input, select, textarea"
+
+        );
+
+}
+
+
+
+//============================================================
+// KEYBOARD SUPPORT
+//============================================================
+
+document.addEventListener("keydown",
+
+function(e)
+{
+
+    const modal =
+        document.getElementById("eventModal");
+
+    if(modal.classList.contains("hidden"))
+        return;
+
+    if(e.key === "Escape")
+    {
+
+        closeEventModal();
+
+        return;
+
+    }
+
+    if(e.key !== "Tab")
+        return;
+
+    if(focusableElements.length === 0)
+        return;
+
+    const first =
+        focusableElements[0];
+
+    const last =
+        focusableElements[
+            focusableElements.length - 1
+        ];
+
+    if(e.shiftKey)
+    {
+
+        if(document.activeElement === first)
+        {
+
+            e.preventDefault();
+
+            last.focus();
+
+        }
+
+    }
+    else
+    {
+
+        if(document.activeElement === last)
+        {
+
+            e.preventDefault();
+
+            first.focus();
+
+        }
+
+    }
+
+});
+
+
+
+//============================================================
+// ESCAPE HTML
+//============================================================
+
+function escapeHtml(value)
+{
+
+    if(value === undefined || value === null)
+        return "";
+
+    return String(value)
+
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#39;");
+
+}
+
+
+
+//============================================================
+// SAFE TEXT
+//============================================================
+
+function safe(value)
+{
+
+    return escapeHtml(value);
+
+}
+
+
+
+//============================================================
+// IMAGE FALLBACK
+//============================================================
+
+function initializeImages()
+{
+
+    document
+
+    .querySelectorAll("#modalBody img")
+
+    .forEach(function(img)
+    {
+
+        img.onerror = function()
+        {
+
+            this.style.display = "none";
+
+        };
+
+    });
+
+}
+
+
+
+//============================================================
+// AFTER RENDER
+//============================================================
+
+const originalRenderEvent = renderEvent;
+
+renderEvent = function(event)
+{
+
+    originalRenderEvent(event);
+
+    initializeImages();
+
+};
+
+
+
+//============================================================
+// SCROLL TO MODAL TOP
+//============================================================
+
+function scrollModalTop()
+{
+
+    const windowElement =
+        document.querySelector(".modal-window");
+
+    if(windowElement)
+    {
+
+        windowElement.scrollTop = 0;
+
+    }
+
+}
+
+
+
+//============================================================
+// FORMAT ADDRESS
+//============================================================
+
+function formattedAddress(event)
+{
+
+    return [
+
+        event.street,
+
+        event.city,
+
+        event.state,
+
+        event.zip
+
+    ]
+
+    .filter(Boolean)
+
+    .join(", ");
+
+}
+
+
+
+//============================================================
+// COPY ADDRESS
+//============================================================
+
+function copyEventAddress()
+{
+
+    if(!currentEvent)
+        return;
+
+    navigator.clipboard.writeText(
+
+        formattedAddress(currentEvent)
+
+    );
+
+    showToast("Address copied.");
+
+}
+
+
+
+//============================================================
+// PRINT EVENT
+//============================================================
+
+function printEvent()
+{
+
+    window.print();
+
+}
+
+
+
+//============================================================
+// MODAL READY
+//============================================================
+
+console.log("ui.js initialized.");
+
