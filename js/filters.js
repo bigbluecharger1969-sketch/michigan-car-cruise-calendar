@@ -1,237 +1,46 @@
-/**********************************************************************
- *
- * Michigan Car Cruise Calendar
- *
- * filters.js
- *
- * Search & Filtering
- *
- **********************************************************************/
+/* Event collection searching, filtering, and sorting. */
+const Filters = (() => {
+    let events = [];
+    let criteria = { search: "", type: "all", date: "", weekendOnly: false };
+    let filteredEvents = [];
 
-//============================================================
-// FILTER STATE
-//============================================================
-
-let filteredEvents = [];
-
-
-//============================================================
-// INITIALIZE FILTERS
-//============================================================
-
-document.addEventListener("DOMContentLoaded", function ()
-{
-    initializeFilters();
-});
-
-
-
-function initializeFilters()
-{
-    initializeSearchFilter();
-    initializeDateFilter();
-    initializeQuickFilters();
-}
-
-
-
-//============================================================
-// SEARCH
-//============================================================
-
-function initializeSearchFilter()
-{
-    const searchBox = document.getElementById("searchBox");
-
-    if (!searchBox)
-        return;
-
-    searchBox.addEventListener("input", applyFilters);
-}
-
-
-
-//============================================================
-// DATE PICKER
-//============================================================
-
-function initializeDateFilter()
-{
-    const picker = document.getElementById("selectedDate");
-
-    if (!picker)
-        return;
-
-    picker.addEventListener("change", applyFilters);
-}
-
-
-
-//============================================================
-// QUICK FILTER BUTTONS
-//============================================================
-
-function initializeQuickFilters()
-{
-    const todayButton = document.getElementById("todayButton");
-
-    if (todayButton)
-    {
-        todayButton.addEventListener("click", function ()
-        {
-            const picker = document.getElementById("selectedDate");
-
-            if (!picker)
-                return;
-
-            picker.value = new Date().toISOString().substring(0, 10);
-
-            applyFilters();
-        });
-    }
-
-    const allButton = document.getElementById("allEventsButton");
-
-    if (allButton)
-    {
-        allButton.addEventListener("click", function ()
-        {
-            const picker = document.getElementById("selectedDate");
-
-            if (picker)
-                picker.value = "";
-
-            const searchBox = document.getElementById("searchBox");
-
-            if (searchBox)
-                searchBox.value = "";
-
-            applyFilters();
-        });
-    }
-}
-
-
-
-//============================================================
-// APPLY FILTERS
-//============================================================
-
-function applyFilters()
-{
-    const searchText =
-        getSearchText();
-
-    const selectedDate =
-        getSelectedDate();
-
-    filteredEvents = events.filter(function (event)
-    {
-        if (!matchesSearch(event, searchText))
-            return false;
-
-        if (!matchesDate(event, selectedDate))
-            return false;
-
-        return true;
+    const dateKey = (date) => date instanceof Date && !Number.isNaN(date) ? date.toISOString().slice(0, 10) : "";
+    const normalize = (value) => String(value || "").toLowerCase();
+    const sortByDate = (items) => [...items].sort((first, second) => {
+        if (!first.date) return 1;
+        if (!second.date) return -1;
+        return first.date - second.date;
     });
+    const matchesSearch = (event, search) => !search || [event.name, event.city, event.venue, event.organizer, event.description, event.type]
+        .some((value) => normalize(value).includes(search));
+    const matchesType = (event, type) => type === "all" || normalize(event.type) === normalize(type);
+    const matchesDate = (event, date) => !date || dateKey(event.date) === date;
+    const matchesWeekend = (event) => !criteria.weekendOnly || (event.date && [0, 6].includes(event.date.getDay()));
 
-    populateEventTable(filteredEvents);
-}
+    const apply = () => {
+        filteredEvents = sortByDate(events.filter((event) =>
+            matchesSearch(event, criteria.search) &&
+            matchesType(event, criteria.type) &&
+            matchesDate(event, criteria.date) &&
+            matchesWeekend(event)
+        ));
+        return filteredEvents;
+    };
 
+    const initialize = (eventCollection) => {
+        events = sortByDate(eventCollection);
+        criteria = { search: "", type: "all", date: "", weekendOnly: false };
+        return apply();
+    };
+    const setSearch = (search) => { criteria.search = normalize(search).trim(); criteria.weekendOnly = false; return apply(); };
+    const setType = (type) => { criteria.type = type || "all"; criteria.weekendOnly = false; return apply(); };
+    const setDate = (date) => { criteria.date = date || ""; criteria.weekendOnly = false; return apply(); };
+    const showWeekend = () => { criteria = { ...criteria, date: "", weekendOnly: true }; return apply(); };
+    const reset = () => { criteria = { search: "", type: "all", date: "", weekendOnly: false }; return apply(); };
+    const getFeaturedEvent = () => events.find((event) => event.featured) || null;
+    const getNextUpcomingEvent = () => events.find((event) => event.date && event.date >= new Date()) || null;
+    const getCriteria = () => ({ ...criteria });
+    const getEvents = () => [...filteredEvents];
 
-
-//============================================================
-// SEARCH MATCH
-//============================================================
-
-function matchesSearch(event, searchText)
-{
-    if (searchText === "")
-        return true;
-
-    const text = [
-
-        event.name,
-        event.city,
-        event.venue,
-        event.description,
-        event.type
-
-    ].join(" ").toLowerCase();
-
-    return text.includes(searchText);
-}
-
-
-
-//============================================================
-// DATE MATCH
-//============================================================
-
-function matchesDate(event, selectedDate)
-{
-    if (selectedDate === "")
-        return true;
-
-    const eventDate =
-        event.date.toISOString().substring(0, 10);
-
-    return eventDate === selectedDate;
-}
-
-
-
-//============================================================
-// HELPERS
-//============================================================
-
-function getSearchText()
-{
-    const box = document.getElementById("searchBox");
-
-    if (!box)
-        return "";
-
-    return box.value.trim().toLowerCase();
-}
-
-
-
-function getSelectedDate()
-{
-    const picker = document.getElementById("selectedDate");
-
-    if (!picker)
-        return "";
-
-    return picker.value;
-}
-
-
-
-//============================================================
-// PUBLIC FUNCTIONS
-//============================================================
-
-function clearFilters()
-{
-    const searchBox = document.getElementById("searchBox");
-
-    if (searchBox)
-        searchBox.value = "";
-
-    const picker = document.getElementById("selectedDate");
-
-    if (picker)
-        picker.value = "";
-
-    applyFilters();
-}
-
-
-
-function refreshFilters()
-{
-    applyFilters();
-}
+    return { initialize, setSearch, setType, setDate, showWeekend, reset, getEvents, getCriteria, getFeaturedEvent, getNextUpcomingEvent };
+})();

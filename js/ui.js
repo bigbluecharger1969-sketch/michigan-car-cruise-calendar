@@ -1,1191 +1,155 @@
-/***********************************************************************
- *
- * Michigan Car Cruise Calendar
- *
- * ui.js
- *
- * User Interface Manager
- *
- **********************************************************************/
-
-//============================================================
-// UI STATE
-//============================================================
-
-let currentEvent = null;
-
-
-//============================================================
-// INITIALIZE UI
-//============================================================
-
-document.addEventListener("DOMContentLoaded", function ()
-{
-
-    createEventModal();
-
-});
-
-
-//============================================================
-// CREATE MODAL
-//============================================================
-
-function createEventModal()
-{
-
-    //--------------------------------------------------------
-    // Already Exists?
-    //--------------------------------------------------------
-
-    if(document.getElementById("eventModal"))
-        return;
-
-    //--------------------------------------------------------
-    // Build Modal
-    //--------------------------------------------------------
-
-    const modal = document.createElement("div");
-
-    modal.id = "eventModal";
-
-    modal.className = "event-modal hidden";
-
-    modal.innerHTML = `
-
-<div class="modal-overlay">
-
-<div class="modal-window">
-
-<div class="modal-header">
-
-<h2 id="modalTitle">
-
-Event
-
-</h2>
-
-<button
-
-id="closeModal"
-
-class="close-button">
-
-<i class="fa-solid fa-xmark"></i>
-
-</button>
-
-</div>
-
-<div
-
-class="modal-body"
-
-id="modalBody">
-
-</div>
-
-<div
-
-class="modal-footer">
-
-<button
-
-id="directionsButton"
-
-class="btn btn-primary">
-
-<i class="fa-solid fa-location-arrow"></i>
-
-Directions
-
-</button>
-
-<button
-
-id="facebookButton"
-
-class="btn btn-facebook">
-
-<i class="fa-brands fa-facebook"></i>
-
-Facebook
-
-</button>
-
-<button
-
-id="websiteButton"
-
-class="btn btn-secondary">
-
-<i class="fa-solid fa-globe"></i>
-
-Website
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-    document.body.appendChild(modal);
-
-    initializeModalButtons();
-
-}
-
-
-//============================================================
-// INITIALIZE BUTTONS
-//============================================================
-
-function initializeModalButtons()
-{
-
-    document
-
-    .getElementById("closeModal")
-
-    .addEventListener(
-
-        "click",
-
-        closeEventModal
-
-    );
-
-
-
-    document
-
-    .querySelector(".modal-overlay")
-
-    .addEventListener(
-
-        "click",
-
-        function(e)
-        {
-
-            if(
-
-                e.target === this
-
-            )
-
-            {
-
-                closeEventModal();
-
-            }
-
-        }
-
-    );
-
-
-
-    document
-
-    .getElementById("directionsButton")
-
-    .addEventListener(
-
-        "click",
-
-        function()
-        {
-
-            if(currentEvent)
-
-                openDirections(currentEvent);
-
-        }
-
-    );
-
-
-
-    document
-
-    .getElementById("facebookButton")
-
-    .addEventListener(
-
-        "click",
-
-        function()
-        {
-
-            if(currentEvent)
-
-                openFacebook(currentEvent);
-
-        }
-
-    );
-
-
-
-    document
-
-    .getElementById("websiteButton")
-
-    .addEventListener(
-
-        "click",
-
-        function()
-        {
-
-            if(currentEvent)
-
-                openWebsite(currentEvent);
-
-        }
-
-    );
-
-}
-
-
-//============================================================
-// OPEN MODAL
-//============================================================
-
-function showEvent(event)
-{
-
-    currentEvent = event;
-
-    document.getElementById(
-
-        "modalTitle"
-
-    ).textContent =
-
-        event.name;
-
-    renderEvent(event);
-
-    document
-
-    .getElementById("eventModal")
-
-    .classList.remove("hidden");
-
-}
-
-
-
-//============================================================
-// CLOSE MODAL
-//============================================================
-
-function closeEventModal()
-{
-
-    document
-
-    .getElementById("eventModal")
-
-    .classList.add("hidden");
-
-}
-
-
-
-//============================================================
-// ESC KEY
-//============================================================
-
-document.addEventListener(
-
-"keydown",
-
-function(e)
-{
-
-    if(
-
-        e.key === "Escape"
-
-    )
-
-    {
-
-        closeEventModal();
-
-    }
-
-});
-
-
-
-//============================================================
-// RENDER EVENT
-//============================================================
-
-function renderEvent(event)
-{
-
-    const body =
-
-        document.getElementById(
-
-            "modalBody"
-
-        );
-
-    body.innerHTML =
-
-    `
-
-<div class="event-detail">
-
-<h3>
-
-${event.name}
-
-</h3>
-
-<p>
-
-<i class="fa-solid fa-location-dot"></i>
-
-${event.venue}
-
-</p>
-
-<p>
-
-${event.street}
-
-</p>
-
-<p>
-
-${event.city},
-
-${event.state}
-
-${event.zip}
-
-</p>
-
-<hr>
-
-<p>
-
-<strong>Date:</strong>
-
-${formatDate(event.date)}
-
-</p>
-
-<p>
-
-<strong>Time:</strong>
-
-${event.startTime}
-
-${event.endTime ?
-
-" - " + event.endTime : ""}
-
-</p>
-
-<hr>
-
-<p>
-
-${event.description || "No description available."}
-
-</p>
-
-</div>
-
-`;
-/***********************************************************************
- *
- * ui.js
- *
- * PART 2
- *
- * Event Rendering
- *
- **********************************************************************/
-
-
-//============================================================
-// BUILD FEATURE BADGES
-//============================================================
-
-function buildBadges(event)
-{
-
-    let html = "";
-
-    if(event.featuredEvent)
-        html += `<span class="modal-badge">⭐ Featured Event</span>`;
-
-    if(event.familyFriendly)
-        html += `<span class="modal-badge">👨‍👩‍👧 Family Friendly</span>`;
-
-    if(event.food)
-        html += `<span class="modal-badge">🍔 Food</span>`;
-
-    if(event.dj)
-        html += `<span class="modal-badge">🎵 DJ</span>`;
-
-    if(event.liveMusic)
-        html += `<span class="modal-badge">🎸 Live Music</span>`;
-
-    if(event.awards)
-        html += `<span class="modal-badge">🏆 Awards</span>`;
-
-    if(event.doorPrizes)
-        html += `<span class="modal-badge">🎁 Door Prizes</span>`;
-
-    if(event.fifty50)
-        html += `<span class="modal-badge">💵 50 / 50</span>`;
-
-    if(event.burnoutsAllowed)
-        html += `<span class="modal-badge">🔥 Burnouts Allowed</span>`;
-
-    if(html === "")
+/* DOM rendering and interface interactions. */
+const UI = (() => {
+    let handlers = {};
+    let activeEvent = null;
+    let lastFocusedElement = null;
+    let toastTimer = null;
+
+    const byId = (id) => document.getElementById(id);
+    const escapeHtml = (value) => String(value ?? "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    const formatDate = (date) => date instanceof Date && !Number.isNaN(date)
+        ? date.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
+        : "Date TBA";
+    const formatMoney = (value) => value || "Free";
+    const formatTime = (value) => value || "TBA";
+    const badgeClass = (type) => {
+        const value = String(type || "").toLowerCase();
+        if (value.includes("show")) return "badge-show";
+        if (value.includes("cruise")) return "badge-cruise";
+        if (value.includes("coffee")) return "badge-coffee";
+        if (value.includes("swap")) return "badge-swap";
+        if (value.includes("charity")) return "badge-charity";
         return "";
-
-    return `
-
-<div class="modal-badges">
-
-${html}
-
-</div>
-
-`;
-
-}
-
-
-
-//============================================================
-// BUILD INFORMATION GRID
-//============================================================
-
-function buildInformationGrid(event)
-{
-
-    return `
-
-<div class="feature-grid">
-
-<div class="feature">
-
-<i class="fa-solid fa-calendar"></i>
-
-<strong>Date</strong>
-
-<br>
-
-${formatDate(event.date)}
-
-</div>
-
-
-<div class="feature">
-
-<i class="fa-regular fa-clock"></i>
-
-<strong>Time</strong>
-
-<br>
-
-${event.startTime || "TBA"}
-
-${event.endTime ? "<br>" + event.endTime : ""}
-
-</div>
-
-
-<div class="feature">
-
-<i class="fa-solid fa-dollar-sign"></i>
-
-<strong>Entry</strong>
-
-<br>
-
-${formatMoney(event.entryFee)}
-
-</div>
-
-
-<div class="feature">
-
-<i class="fa-solid fa-eye"></i>
-
-<strong>Spectators</strong>
-
-<br>
-
-${formatMoney(event.spectatorFee)}
-
-</div>
-
-</div>
-
-`;
-
-}
-
-
-
-//============================================================
-// BUILD LOCATION
-//============================================================
-
-function buildLocation(event)
-{
-
-    return `
-
-<h3>
-
-<i class="fa-solid fa-location-dot"></i>
-
-Location
-
-</h3>
-
-<p>
-
-<strong>${event.venue || ""}</strong>
-
-</p>
-
-<p>
-
-${event.street || ""}
-
-</p>
-
-<p>
-
-${event.city || ""},
-
-${event.state || ""}
-
-${event.zip || ""}
-
-</p>
-
-`;
-
-}
-
-
-
-//============================================================
-// BUILD DESCRIPTION
-//============================================================
-
-function buildDescription(event)
-{
-
-    return `
-
-<h3>
-
-<i class="fa-solid fa-circle-info"></i>
-
-Description
-
-</h3>
-
-<p>
-
-${event.description || "No description available."}
-
-</p>
-
-`;
-
-}
-
-
-
-//============================================================
-// BUILD ORGANIZER
-//============================================================
-
-function buildOrganizer(event)
-{
-
-    if(!event.organizer && !event.contact)
-        return "";
-
-    return `
-
-<h3>
-
-<i class="fa-solid fa-user-group"></i>
-
-Organizer
-
-</h3>
-
-<p>
-
-${event.organizer || ""}
-
-</p>
-
-<p>
-
-${event.contact || ""}
-
-</p>
-
-`;
-
-}
-
-
-
-//============================================================
-// BUILD WEATHER
-//============================================================
-
-function buildWeather(event)
-{
-
-    if(!event.weatherPolicy)
-        return "";
-
-    return `
-
-<h3>
-
-<i class="fa-solid fa-cloud-sun"></i>
-
-Weather Policy
-
-</h3>
-
-<p>
-
-${event.weatherPolicy}
-
-</p>
-
-`;
-
-}
-
-
-
-//============================================================
-// BUILD LINKS
-//============================================================
-
-function buildLinks(event)
-{
-
-    let html = "";
-
-    if(event.website)
-    {
-
-        html += `
-
-<p>
-
-<i class="fa-solid fa-globe"></i>
-
-<a href="${event.website}"
-
-target="_blank">
-
-Website
-
-</a>
-
-</p>
-
-`;
-
-    }
-
-    if(event.facebook)
-    {
-
-        html += `
-
-<p>
-
-<i class="fa-brands fa-facebook"></i>
-
-<a href="${event.facebook}"
-
-target="_blank">
-
-Facebook
-
-</a>
-
-</p>
-
-`;
-
-    }
-
-    if(html === "")
-        return "";
-
-    return `
-
-<h3>
-
-Links
-
-</h3>
-
-${html}
-
-`;
-
-}
-
-
-
-//============================================================
-// RENDER EVENT
-//============================================================
-
-function renderEvent(event)
-{
-
-    const body = document.getElementById("modalBody");
-
-    body.innerHTML = `
-
-${event.flyerLink ?
-
-`
-
-<div style="margin-bottom:25px;">
-
-<img
-
-src="${event.flyerLink}"
-
-alt="${event.name}"
-
-style="width:100%;border-radius:12px;">
-
-</div>
-
-`
-
-: ""}
-
-${buildBadges(event)}
-
-${buildInformationGrid(event)}
-
-<hr>
-
-${buildLocation(event)}
-
-<hr>
-
-${buildDescription(event)}
-
-${buildOrganizer(event)}
-
-${buildWeather(event)}
-
-${buildLinks(event)}
-
-`;
-
-
-
-    //---------------------------------------------------------
-    // Enable / Disable Buttons
-    //---------------------------------------------------------
-
-    document.getElementById("facebookButton").disabled =
-        !event.facebook;
-
-    document.getElementById("websiteButton").disabled =
-        !event.website;
-
-}
-}
-
-/***********************************************************************
- *
- * ui.js
- *
- * PART 3
- *
- * Modal Polish & Accessibility
- *
- **********************************************************************/
-
-//============================================================
-// MODAL STATE
-//============================================================
-
-let lastFocusedElement = null;
-
-let focusableElements = [];
-
-
-
-//============================================================
-// OPEN MODAL
-//============================================================
-
-function showEvent(event)
-{
-
-    currentEvent = event;
-
-    lastFocusedElement = document.activeElement;
-
-    document.getElementById("modalTitle").textContent =
-        event.name;
-
-    renderEvent(event);
-
-    const modal = document.getElementById("eventModal");
-
-    modal.classList.remove("hidden");
-
-    document.body.classList.add("modal-open");
-
-    updateFooterButtons(event);
-
-    initializeFocusTrap();
-
-    const closeButton =
-        document.getElementById("closeModal");
-
-    if(closeButton)
-    {
-        closeButton.focus();
-    }
-
-}
-
-
-
-//============================================================
-// CLOSE MODAL
-//============================================================
-
-function closeEventModal()
-{
-
-    const modal = document.getElementById("eventModal");
-
-    modal.classList.add("hidden");
-
-    document.body.classList.remove("modal-open");
-
-    if(lastFocusedElement)
-    {
-        lastFocusedElement.focus();
-    }
-
-}
-
-
-
-//============================================================
-// ENABLE / DISABLE BUTTONS
-//============================================================
-
-function updateFooterButtons(event)
-{
-
-    document.getElementById("facebookButton").disabled =
-        !event.facebook;
-
-    document.getElementById("websiteButton").disabled =
-        !event.website;
-
-    document.getElementById("directionsButton").disabled =
-        !(event.street && event.city);
-
-}
-
-
-
-//============================================================
-// FOCUS TRAP
-//============================================================
-
-function initializeFocusTrap()
-{
-
-    const modal =
-        document.getElementById("eventModal");
-
-    focusableElements =
-        modal.querySelectorAll(
-
-            "button, a[href], input, select, textarea"
-
-        );
-
-}
-
-
-
-//============================================================
-// KEYBOARD SUPPORT
-//============================================================
-
-document.addEventListener("keydown",
-
-function(e)
-{
-
-    const modal =
-        document.getElementById("eventModal");
-
-    if(modal.classList.contains("hidden"))
-        return;
-
-    if(e.key === "Escape")
-    {
-
-        closeEventModal();
-
-        return;
-
-    }
-
-    if(e.key !== "Tab")
-        return;
-
-    if(focusableElements.length === 0)
-        return;
-
-    const first =
-        focusableElements[0];
-
-    const last =
-        focusableElements[
-            focusableElements.length - 1
-        ];
-
-    if(e.shiftKey)
-    {
-
-        if(document.activeElement === first)
-        {
-
-            e.preventDefault();
-
-            last.focus();
-
+    };
+    const buildBadge = (type) => type ? `<span class="badge ${badgeClass(type)}">${escapeHtml(type)}</span>` : "";
+    const addressFor = (event) => [event.street, event.city, event.state, event.zip].filter(Boolean).join(", ");
+
+    const renderTable = (events) => {
+        const body = document.querySelector("#eventsTable tbody");
+        if (!body) return;
+        if (!events.length) {
+            body.innerHTML = '<tr><td colspan="6" class="no-events">No events found.</td></tr>';
+            return;
         }
 
-    }
-    else
-    {
-
-        if(document.activeElement === last)
-        {
-
-            e.preventDefault();
-
-            first.focus();
-
-        }
-
-    }
-
-});
-
-
-
-//============================================================
-// ESCAPE HTML
-//============================================================
-
-function escapeHtml(value)
-{
-
-    if(value === undefined || value === null)
-        return "";
-
-    return String(value)
-
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#39;");
-
-}
-
-
-
-//============================================================
-// SAFE TEXT
-//============================================================
-
-function safe(value)
-{
-
-    return escapeHtml(value);
-
-}
-
-
-
-//============================================================
-// IMAGE FALLBACK
-//============================================================
-
-function initializeImages()
-{
-
-    document
-
-    .querySelectorAll("#modalBody img")
-
-    .forEach(function(img)
-    {
-
-        img.onerror = function()
-        {
-
-            this.style.display = "none";
-
-        };
-
-    });
-
-}
-
-
-
-//============================================================
-// AFTER RENDER
-//============================================================
-
-const originalRenderEvent = renderEvent;
-
-renderEvent = function(event)
-{
-
-    originalRenderEvent(event);
-
-    initializeImages();
-
-};
-
-
-
-//============================================================
-// SCROLL TO MODAL TOP
-//============================================================
-
-function scrollModalTop()
-{
-
-    const windowElement =
-        document.querySelector(".modal-window");
-
-    if(windowElement)
-    {
-
-        windowElement.scrollTop = 0;
-
-    }
-
-}
-
-
-
-//============================================================
-// FORMAT ADDRESS
-//============================================================
-
-function formattedAddress(event)
-{
-
-    return [
-
-        event.street,
-
-        event.city,
-
-        event.state,
-
-        event.zip
-
-    ]
-
-    .filter(Boolean)
-
-    .join(", ");
-
-}
-
-
-
-//============================================================
-// COPY ADDRESS
-//============================================================
-
-function copyEventAddress()
-{
-
-    if(!currentEvent)
-        return;
-
-    navigator.clipboard.writeText(
-
-        formattedAddress(currentEvent)
-
-    );
-
-    showToast("Address copied.");
-
-}
-
-
-
-//============================================================
-// PRINT EVENT
-//============================================================
-
-function printEvent()
-{
-
-    window.print();
-
-}
-
-
-
-//============================================================
-// MODAL READY
-//============================================================
-
-console.log("ui.js initialized.");
-
+        const fragment = document.createDocumentFragment();
+        events.forEach((event) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td class="event-date">${formatDate(event.date)}</td>
+                <td><div class="event-name">${escapeHtml(event.name)}</div><small>${escapeHtml(event.venue)}</small></td>
+                <td class="event-city">${escapeHtml(event.city)}</td>
+                <td>${buildBadge(event.type)}</td><td class="event-time">${escapeHtml(formatTime(event.startTime))}</td>
+                <td><button class="btn btn-secondary details-button" type="button">Details</button></td>`;
+            row.querySelector(".details-button").addEventListener("click", () => showEvent(event));
+            fragment.appendChild(row);
+        });
+        body.replaceChildren(fragment);
+    };
+
+    const renderStatistics = (events) => {
+        const countByType = (term) => events.filter((event) => String(event.type).toLowerCase().includes(term)).length;
+        [["eventCount", events.length], ["showCount", countByType("show")], ["cruiseCount", countByType("cruise")], ["coffeeCount", countByType("coffee")]]
+            .forEach(([id, value]) => { const element = byId(id); if (element) element.textContent = value; });
+    };
+
+    const renderFeaturedEvent = (event) => {
+        const title = byId("featuredTitle");
+        const description = byId("featuredDescription");
+        const button = byId("featuredButton");
+        if (!title || !description || !button) return;
+        title.textContent = event ? event.name : "Michigan Car Cruise Calendar";
+        description.textContent = event ? event.description || "Event details are coming soon." : "Featured events will appear here as they are added.";
+        button.disabled = !event;
+        button.onclick = () => event && showEvent(event);
+    };
+
+    const render = ({ events, featuredEvent }) => {
+        renderTable(events);
+        renderStatistics(events);
+        renderFeaturedEvent(featuredEvent);
+        document.title = `Michigan Car Cruise Calendar (${events.length} Events)`;
+    };
+
+    const createModal = () => {
+        if (byId("eventModal")) return;
+        document.body.insertAdjacentHTML("beforeend", `<div id="eventModal" class="event-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-overlay"><div class="modal-window"><div class="modal-header"><h2 id="modalTitle">Event</h2>
+            <button id="closeModal" class="close-button" type="button" aria-label="Close event details"><i class="fa-solid fa-xmark"></i></button></div>
+            <div id="modalBody" class="modal-body"></div><div class="modal-footer">
+            <button id="directionsButton" class="btn btn-primary" type="button">Directions</button>
+            <button id="facebookButton" class="btn btn-facebook" type="button">Facebook</button>
+            <button id="websiteButton" class="btn btn-secondary" type="button">Website</button></div></div></div></div>`);
+        byId("closeModal").addEventListener("click", closeEventModal);
+        document.querySelector("#eventModal .modal-overlay").addEventListener("click", (event) => { if (event.target === event.currentTarget) closeEventModal(); });
+        byId("directionsButton").addEventListener("click", () => openDirections(activeEvent));
+        byId("facebookButton").addEventListener("click", () => openLink(activeEvent?.facebook, "No Facebook page available."));
+        byId("websiteButton").addEventListener("click", () => openLink(activeEvent?.website, "No website available."));
+    };
+
+    const badges = (event) => [[event.featured, "Featured Event"], [event.familyFriendly, "Family Friendly"], [event.food, "Food"], [event.dj, "DJ"], [event.liveMusic, "Live Music"], [event.awards, "Awards"], [event.doorPrizes, "Door Prizes"], [event.fiftyFifty, "50 / 50"], [event.burnouts, "Burnouts Allowed"]]
+        .filter(([enabled]) => enabled).map(([, label]) => `<span class="modal-badge">${label}</span>`).join("");
+    const optionalSection = (heading, content) => content ? `<h3>${heading}</h3><p>${escapeHtml(content)}</p>` : "";
+
+    const showEvent = (event) => {
+        activeEvent = event;
+        lastFocusedElement = document.activeElement;
+        byId("modalTitle").textContent = event.name;
+        const flyer = event.flyerLink ? `<img src="${escapeHtml(event.flyerLink)}" alt="${escapeHtml(event.name)} flyer" style="width:100%;border-radius:12px;">` : "";
+        const eventBadges = badges(event);
+        byId("modalBody").innerHTML = `${flyer}${eventBadges ? `<div class="modal-badges">${eventBadges}</div>` : ""}
+            <div class="feature-grid"><div class="feature"><strong>Date</strong><br>${formatDate(event.date)}</div><div class="feature"><strong>Time</strong><br>${escapeHtml(formatTime(event.startTime))}${event.endTime ? `<br>${escapeHtml(event.endTime)}` : ""}</div><div class="feature"><strong>Entry</strong><br>${escapeHtml(formatMoney(event.entryFee))}</div><div class="feature"><strong>Spectators</strong><br>${escapeHtml(formatMoney(event.spectatorFee))}</div></div><hr>
+            <h3>Location</h3><p><strong>${escapeHtml(event.venue)}</strong><br>${escapeHtml(addressFor(event))}</p><hr>
+            ${optionalSection("Description", event.description || "No description available.")}${optionalSection("Organizer", [event.organizer, event.contact].filter(Boolean).join(" — "))}${optionalSection("Weather Policy", event.weatherPolicy)}`;
+        byId("directionsButton").disabled = !addressFor(event);
+        byId("facebookButton").disabled = !event.facebook;
+        byId("websiteButton").disabled = !event.website;
+        byId("eventModal").classList.remove("hidden");
+        document.body.classList.add("modal-open");
+        byId("closeModal").focus();
+    };
+    const closeEventModal = () => {
+        const modal = byId("eventModal");
+        if (!modal || modal.classList.contains("hidden")) return;
+        modal.classList.add("hidden");
+        document.body.classList.remove("modal-open");
+        lastFocusedElement?.focus();
+    };
+    const openLink = (url, fallback) => url ? window.open(url, "_blank", "noopener") : showToast(fallback, "error");
+    const openDirections = (event) => {
+        const address = event && addressFor(event);
+        if (!address) return showToast("No address available.", "error");
+        window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`, "_blank", "noopener");
+    };
+    const showToast = (message, type = "info") => {
+        const toast = byId("toast");
+        if (!toast) return;
+        toast.className = `${type} show`;
+        toast.textContent = message;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
+    };
+    const syncControls = (criteria) => {
+        const search = byId("searchBox"); const date = byId("selectedDate");
+        if (search) search.value = criteria.search;
+        if (date) date.value = criteria.date;
+        document.querySelectorAll(".filterButton").forEach((button) => button.classList.toggle("active", button.dataset.filter === criteria.type));
+    };
+    const initialize = (callbacks) => {
+        handlers = callbacks;
+        createModal();
+        byId("searchBox")?.addEventListener("input", (event) => handlers.onSearch(event.target.value));
+        byId("selectedDate")?.addEventListener("change", (event) => handlers.onDate(event.target.value));
+        byId("todayButton")?.addEventListener("click", () => handlers.onDate(new Date().toISOString().slice(0, 10)));
+        byId("weekendButton")?.addEventListener("click", () => handlers.onWeekend());
+        byId("allEventsButton")?.addEventListener("click", () => handlers.onReset());
+        document.querySelectorAll(".filterButton").forEach((button) => button.addEventListener("click", () => handlers.onType(button.dataset.filter)));
+        document.querySelectorAll(".main-nav a[href^='#']").forEach((link) => link.addEventListener("click", (event) => { event.preventDefault(); byId(link.getAttribute("href").slice(1))?.scrollIntoView({ behavior: "smooth" }); }));
+        document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeEventModal(); if (event.key === "/" && document.activeElement?.tagName !== "INPUT") { event.preventDefault(); byId("searchBox")?.focus(); } });
+    };
+    const showLoading = (message = "Loading events...") => { const overlay = byId("loadingOverlay"); if (overlay) { overlay.classList.remove("hidden"); overlay.querySelector(".loading-message").textContent = message; } };
+    const hideLoading = () => byId("loadingOverlay")?.classList.add("hidden");
+
+    return { initialize, render, syncControls, showLoading, hideLoading, showToast };
+})();
