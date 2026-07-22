@@ -10,7 +10,11 @@ const App = (() => {
             featuredEvent: Filters.getFeaturedEvent() || Filters.getNextUpcomingEvent() || state.events[0] || null
         });
     };
-    const apply = (operation) => { operation(); render(); };
+    const apply = (operation) => {
+        operation();
+        render();
+        UI.scrollToEvents();
+    };
     const start = async () => {
         if (state.initialized) return;
         state.initialized = true;

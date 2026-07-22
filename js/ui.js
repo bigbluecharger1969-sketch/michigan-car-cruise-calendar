@@ -136,6 +136,7 @@ const UI = (() => {
         if (date) date.value = criteria.date;
         document.querySelectorAll(".filterButton").forEach((button) => button.classList.toggle("active", button.dataset.filter === criteria.type));
     };
+    const scrollToEvents = () => byId("events")?.scrollIntoView({ behavior: "smooth", block: "start" });
     const initialize = (callbacks) => {
         handlers = callbacks;
         createModal();
@@ -151,5 +152,5 @@ const UI = (() => {
     const showLoading = (message = "Loading events...") => { const overlay = byId("loadingOverlay"); if (overlay) { overlay.classList.remove("hidden"); overlay.querySelector(".loading-message").textContent = message; } };
     const hideLoading = () => byId("loadingOverlay")?.classList.add("hidden");
 
-    return { initialize, render, syncControls, showLoading, hideLoading, showToast };
+    return { initialize, render, syncControls, scrollToEvents, showLoading, hideLoading, showToast };
 })();
