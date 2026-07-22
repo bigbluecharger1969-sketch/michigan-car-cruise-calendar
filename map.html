@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Michigan Event Map | Michigan Car Cruise Calendar</title>
+    <meta name="description" content="Explore Michigan car shows, cruise nights, and Cars & Coffee events by location.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/navigation.css">
+    <link rel="stylesheet" href="css/mobile.css">
+    <link rel="stylesheet" href="css/map.css">
+</head>
+<body>
+    <header class="map-hero">
+        <div class="container">
+            <p class="map-eyebrow"><i class="fa-solid fa-map-location-dot"></i> Michigan Car Cruise Calendar</p>
+            <h1>Michigan Event Map</h1>
+            <p>Find upcoming automotive events by date, category, and location.</p>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo"><i class="fa-solid fa-car-side"></i> MCCC</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#today">Today's Shows</a></li>
+                <li><a href="index.html#events">Events</a></li>
+                <li><a href="map.html" class="active">Map</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="map-page">
+        <section class="map-controls-section">
+            <div class="container">
+                <div class="map-controls">
+                    <label for="mapDate">Event date<input id="mapDate" type="date"></label>
+                    <button id="mapToday" class="btn btn-primary" type="button">Today</button>
+                    <button id="mapAllEvents" class="btn btn-secondary" type="button">All dates</button>
+                    <label for="mapType">Event type<select id="mapType">
+                        <option value="all">All event types</option>
+                        <option value="Car Show">Car Shows</option>
+                        <option value="Cruise Night">Cruise Nights</option>
+                        <option value="Cars & Coffee">Cars &amp; Coffee</option>
+                        <option value="Swap Meet">Swap Meets</option>
+                        <option value="Charity">Charity</option>
+                    </select></label>
+                </div>
+                <p id="mapSummary" class="map-summary" aria-live="polite">Loading events…</p>
+            </div>
+        </section>
+
+        <section class="map-content container">
+            <div id="eventMap" class="event-map" aria-label="Map of Michigan event locations">
+                <div class="map-water-label lake-superior">Lake Superior</div>
+                <div class="map-water-label lake-michigan">Lake Michigan</div>
+                <div class="map-water-label lake-huron">Lake Huron</div>
+                <div class="upper-peninsula">Upper Peninsula</div>
+                <div class="lower-peninsula">Lower Peninsula</div>
+                <div id="mapMarkers" class="map-markers"></div>
+                <div class="map-legend"><span></span> Event location</div>
+            </div>
+
+            <aside class="map-event-list" aria-label="Mapped events">
+                <h2>Events on the map</h2>
+                <div id="mapEventList"></div>
+            </aside>
+        </section>
+    </main>
+
+    <div id="mapLoading" class="map-loading">Loading Michigan events…</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="js/sheets.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/map.js"></script>
+</body>
+</html>
